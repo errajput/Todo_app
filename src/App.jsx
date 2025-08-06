@@ -68,11 +68,11 @@ function App() {
   });
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center p-4">
-      <h1 className="text-3xl text-black font-bold mb-6">Todo App</h1>
+    <div className=" min-h-screen bg-white flex flex-col items-center p-4">
+      <h1 className=" text-3xl text-black font-bold mb-6">Todo App</h1>
 
-      <div className="w-full max-w-xl h-full min-h-full bg-gray-200  rounded-md  grid justify-center  gap-2">
-        <div className="flex m-4 gap-2 items-center mb-4">
+      <div className="min-h-full bg-gray-200  rounded-md  flex flex-col items-center gap-2">
+        <div className="flex m-4 gap-2 justify-center mb-4">
           <input
             type="text"
             className="border border-black rounded-md outline-none focus:ring-1 bg-white"
@@ -102,7 +102,7 @@ function App() {
             SortedTodo.map((v) => (
               <div
                 key={v.id}
-                className="flex items-center justify-between  p-2 m-2 rounded-md"
+                className=" p-2 m-2 rounded-md"
                 draggable
                 onDragStart={() => {
                   setDraggingId(v.id);
@@ -111,15 +111,33 @@ function App() {
                 onDrop={(e) => {
                   e.preventDefault();
                   console.log(draggingId, v);
+
+                  const newTodos = [...todo];
+
+                  const draggingIndex = newTodos.findIndex(
+                    (todo) => todo.id === draggingId
+                  );
+
+                  const dropToIndex = newTodos.findIndex(
+                    (todo) => todo.id === v.id
+                  );
+
+                  const draggingTodo = newTodos[draggingIndex];
+                  const dropToTodo = newTodos[dropToIndex];
+
+                  newTodos[draggingIndex] = dropToTodo;
+                  newTodos[dropToIndex] = draggingTodo;
+
+                  saveTodo(newTodos);
                 }}
               >
-                <div className="flex gap-4 ">
+                <div className="flex items-center gap-4 ">
                   <CustomCheckbox
                     checked={v.isDone}
                     onChange={() => markDone(v.id)}
                   />
                   <p
-                    className={` ${
+                    className={`flex-1 text-left ${
                       v.isDone ? "line-through text-gray-500" : ""
                     }`}
                   >
