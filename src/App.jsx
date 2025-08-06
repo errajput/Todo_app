@@ -7,7 +7,7 @@ function App() {
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
-    console.log(localStorage.getItem("todo"));
+    // console.log(localStorage.getItem("todo"));
     setTodo(JSON.parse(localStorage.getItem("todo") || "[]"));
   }, []);
 
@@ -38,8 +38,11 @@ function App() {
   };
 
   const handleDelete = (id) => {
-    const updatedTodos = todo.filter((item) => item.id !== id);
-    saveTodo(updatedTodos);
+    const confirmDelete = confirm("Are you sure you want to delete this todo?");
+    if (confirmDelete) {
+      const updatedTodos = todo.filter((item) => item.id !== id);
+      saveTodo(updatedTodos);
+    }
   };
 
   return (
