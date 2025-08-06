@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import CustomCheckbox from "./components/Customcheckbox";
 import DeleteButton from "./components/DeleteButton";
+import EditButton from "./components/EditButton";
 
 function App() {
   const [todo, setTodo] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [draggingId, setDraggingId] = useState(null);
 
   useEffect(() => {
     // console.log(localStorage.getItem("todo"));
@@ -19,13 +22,21 @@ function App() {
   const handleAdd = () => {
     if (inputValue.trim() === "") return;
 
-    const newTodo = {
-      id: Date.now(),
-      title: inputValue,
-      isDone: false,
-    };
+    if (editingId) {
+      const updatedTodos = todo.map((item) =>
+        item.id === editingId ? { ...item, title: inputValue } : item
+      );
+      saveTodo(updatedTodos);
+      setEditingId(null);
+    } else {
+      const newTodo = {
+        id: Date.now(),
+        title: inputValue,
+        isDone: false,
+      };
 
-    saveTodo([newTodo, ...todo]);
+      saveTodo([newTodo, ...todo]);
+    }
     setInputValue("");
   };
 
@@ -45,11 +56,22 @@ function App() {
     }
   };
 
+  const handleEdit = (id) => {
+    const item = todo.find((t) => t.id === id);
+    setInputValue(item.title);
+    setEditingId(id);
+  };
+
+  const SortedTodo = [...todo].sort((a, b) => {
+    if (a.isDone === b.isDone) return 0;
+    return a.isDone ? 1 : -1;
+  });
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center p-4">
       <h1 className="text-3xl text-black font-bold mb-6">Todo App</h1>
 
-      <div className="w-full max-w-xl h-full min-h-full bg-gray-200  rounded-md  grid justify-center items-center gap-2">
+      <div className="w-full max-w-xl h-full min-h-full bg-gray-200  rounded-md  grid justify-center  gap-2">
         <div className="flex m-4 gap-2 items-center mb-4">
           <input
             type="text"
@@ -63,7 +85,7 @@ function App() {
             }}
           />
           <button
-            className="bg-gray-100  px-2 border items-center rounded-md hover:bg-gray-50 cursor-pointer transition"
+            className="bg-gray-100  px-2 border rounded-md hover:bg-gray-50 cursor-pointer transition"
             onClick={handleAdd}
           >
             Add
@@ -71,24 +93,45 @@ function App() {
         </div>
 
         <div className="w-full max-w-md">
-          {todo.length === 0 ? (
+          {SortedTodo.length === 0 ? (
             <div className="text-center mb-4 text-gray-500 py-10 bg-white shadow-md rounded-md">
               <p className="text-lg font-medium">No tasks yet</p>
               <p className="text-sm mt-1">Start adding your todos above.</p>
             </div>
           ) : (
-            todo.map((v) => (
-              <div key={v.id} className="flex gap-4 mb-3 justify-between">
-                <CustomCheckbox
-                  checked={v.isDone}
-                  onChange={() => markDone(v.id)}
-                />
-                <p> {v.title}</p>
-                <div className="flex gap-2">
-                  <button className="border rounded-md bg-gray-100 px-2 cursor-pointer hover:bg-gray-50">
-                    Edit
-                  </button>
-                  <DeleteButton onClick={() => handleDelete(v.id)} />
+            SortedTodo.map((v) => (
+              <div
+                key={v.id}
+                className="flex items-center justify-between  p-2 m-2 rounded-md"
+                draggable
+                onDragStart={() => {
+                  setDraggingId(v.id);
+                }}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  console.log(draggingId, v);
+                }}
+              >
+                <div className="flex gap-4 ">
+                  <CustomCheckbox
+                    checked={v.isDone}
+                    onChange={() => markDone(v.id)}
+                  />
+                  <p
+                    className={` ${
+                      v.isDone ? "line-through text-gray-500" : ""
+                    }`}
+                  >
+                    {v.title}
+                  </p>
+                  <div className="flex gap-2">
+                    {!v.isDone && (
+                      <EditButton onClick={() => handleEdit(v.id)} />
+                    )}
+
+                    <DeleteButton onClick={() => handleDelete(v.id)} />
+                  </div>
                 </div>
               </div>
             ))
