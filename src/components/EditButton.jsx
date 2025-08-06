@@ -3,7 +3,7 @@ const EditButton = ({ onClick }) => {
     <button
       onClick={onClick}
       aria-label="Edit"
-      className="bg-green-500 text-white hover:bg-green-600 px-2 rounded-md transition cursor-pointer"
+      className="bg-gray-300 text-black border hover:bg-gray-200 px-2 rounded-md transition cursor-pointer"
     >
       Edit
     </button>
