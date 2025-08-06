@@ -2,7 +2,7 @@ const DeleteButton = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="bg-red-500 text-white hover:bg-red-600 px-2  rounded-md transition cursor-pointer"
+      className="bg-gray-300 text-black border hover:bg-gray-200 px-2  rounded-md transition cursor-pointer"
     >
       Delete
     </button>
