@@ -12,9 +12,9 @@
    make draggable - draggable
    which one want to drag - ondragstart,ondragover
    where to drag -ondrop
-8. Separate completed and not completed tasks
-9. Use Icons
-10. Add Drag Icon on Todo List
+8. ✅ Separate completed and not completed tasks - Done
+9. ✅ Use Icons - Done
+10. ✅ Add Drag Icon on Todo List - Done
 11. Change Edit Behavior to make editable in list
-12. Styling of task container width
+12. ✅ Styling of task container width - Done
 13. Code organizing
