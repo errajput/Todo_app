@@ -4,7 +4,6 @@ import DeleteButton from "./components/DeleteButton";
 import EditButton from "./components/EditButton";
 import InputContainer from "./components/InputContainer";
 import { Squares2X2Icon } from "@heroicons/react/24/outline";
-
 import ShowCompletedTodo from "./components/ShowCompletedtodo";
 
 function App() {
@@ -67,6 +66,25 @@ function App() {
     setEditingId(id);
   };
 
+  const handleDropDrag = (dropId) => {
+    // e.preventDefault();
+    // console.log(draggingId, dropId);
+
+    const newTodos = [...todo];
+
+    const draggingIndex = newTodos.findIndex((todo) => todo.id === draggingId);
+
+    const dropToIndex = newTodos.findIndex((todo) => todo.id === dropId);
+
+    const draggingTodo = newTodos[draggingIndex];
+    const dropToTodo = newTodos[dropToIndex];
+
+    newTodos[draggingIndex] = dropToTodo;
+    newTodos[dropToIndex] = draggingTodo;
+
+    saveTodo(newTodos);
+  };
+
   const SortedTodo = [...todo].sort((a, b) => {
     if (a.isDone === b.isDone) return 0;
     return a.isDone ? 1 : -1;
@@ -94,32 +112,9 @@ function App() {
                 key={v.id}
                 className=" p-2 m-2 rounded-md"
                 draggable
-                onDragStart={() => {
-                  setDraggingId(v.id);
-                }}
+                onDragStart={() => setDraggingId(v.id)}
                 onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  // console.log(draggingId, v);
-
-                  const newTodos = [...todo];
-
-                  const draggingIndex = newTodos.findIndex(
-                    (todo) => todo.id === draggingId
-                  );
-
-                  const dropToIndex = newTodos.findIndex(
-                    (todo) => todo.id === v.id
-                  );
-
-                  const draggingTodo = newTodos[draggingIndex];
-                  const dropToTodo = newTodos[dropToIndex];
-
-                  newTodos[draggingIndex] = dropToTodo;
-                  newTodos[dropToIndex] = draggingTodo;
-
-                  saveTodo(newTodos);
-                }}
+                onDrop={() => handleDropDrag(v.id)}
               >
                 <div className="flex items-center gap-4 ">
                   <Squares2X2Icon className="h-3 w-3 text-gray-400 cursor-move" />
@@ -158,32 +153,9 @@ function App() {
                 key={v.id}
                 className=" p-2 m-2 rounded-md"
                 draggable
-                onDragStart={() => {
-                  setDraggingId(v.id);
-                }}
+                onDragStart={() => setDraggingId(v.id)}
                 onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  // console.log(draggingId, v);
-
-                  const newTodos = [...todo];
-
-                  const draggingIndex = newTodos.findIndex(
-                    (todo) => todo.id === draggingId
-                  );
-
-                  const dropToIndex = newTodos.findIndex(
-                    (todo) => todo.id === v.id
-                  );
-
-                  const draggingTodo = newTodos[draggingIndex];
-                  const dropToTodo = newTodos[dropToIndex];
-
-                  newTodos[draggingIndex] = dropToTodo;
-                  newTodos[dropToIndex] = draggingTodo;
-
-                  saveTodo(newTodos);
-                }}
+                onDrop={() => handleDropDrag(v.id)}
               >
                 <div className="flex items-center gap-4 ">
                   <Squares2X2Icon className="h-3 w-3 text-gray-400 cursor-move" />
