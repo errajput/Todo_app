@@ -8,7 +8,7 @@
 4. ✅ Edit todos - done
 5. ✅ Todos are saved in browser's storage - done
 6. ✅ Sorted tasks - done
-7. ✅ Drag and Drop - DONE
+7. ✅ Drag and Drop - Done
    make draggable - draggable
    which one want to drag - ondragstart,ondragover
    where to drag -ondrop
