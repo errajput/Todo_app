@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import CustomCheckbox from "./components/Customcheckbox";
-import DeleteButton from "./components/DeleteButton";
-import EditButton from "./components/EditButton";
+
 import InputContainer from "./components/InputContainer";
-import { Squares2X2Icon } from "@heroicons/react/24/outline";
+
 import ShowCompletedTodo from "./components/ShowCompletedtodo";
+import TodoItem from "./components/TodoItem";
 
 function App() {
   const [todo, setTodo] = useState([]);
@@ -108,36 +107,16 @@ function App() {
             </div>
           ) : (
             SortedTodo.filter((v) => !v.isDone).map((v) => (
-              <div
+              <TodoItem
                 key={v.id}
-                className=" p-2 m-2 rounded-md"
-                draggable
-                onDragStart={() => setDraggingId(v.id)}
+                v={v}
+                markDone={markDone}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+                setDraggingId={setDraggingId}
                 onDragOver={(e) => e.preventDefault()}
-                onDrop={() => handleDropDrag(v.id)}
-              >
-                <div className="flex items-center gap-4 ">
-                  <Squares2X2Icon className="h-3 w-3 text-gray-400 cursor-move" />
-                  <CustomCheckbox
-                    checked={v.isDone}
-                    onChange={() => markDone(v.id)}
-                  />
-                  <p
-                    className={`flex-1 text-left ${
-                      v.isDone ? "line-through text-gray-500" : ""
-                    }`}
-                  >
-                    {v.title}
-                  </p>
-                  <div className="flex gap-2">
-                    {!v.isDone && (
-                      <EditButton onClick={() => handleEdit(v.id)} />
-                    )}
-
-                    <DeleteButton onClick={() => handleDelete(v.id)} />
-                  </div>
-                </div>
-              </div>
+                handleDropDrag={handleDropDrag}
+              />
             ))
           )}
         </div>
@@ -147,38 +126,18 @@ function App() {
             setShowCompletedTodo={setShowCompletedTodo}
             showCompletedTodo={showCompletedTodo}
           />
+
           {showCompletedTodo &&
             SortedTodo.filter((v) => v.isDone).map((v) => (
-              <div
+              <TodoItem
                 key={v.id}
-                className=" p-2 m-2 rounded-md"
-                draggable
-                onDragStart={() => setDraggingId(v.id)}
+                v={v}
+                markDone={markDone}
+                handleDelete={handleDelete}
+                setDraggingId={setDraggingId}
                 onDragOver={(e) => e.preventDefault()}
-                onDrop={() => handleDropDrag(v.id)}
-              >
-                <div className="flex items-center gap-4 ">
-                  <Squares2X2Icon className="h-3 w-3 text-gray-400 cursor-move" />
-                  <CustomCheckbox
-                    checked={v.isDone}
-                    onChange={() => markDone(v.id)}
-                  />
-                  <p
-                    className={`flex-1 text-left ${
-                      v.isDone ? "line-through text-gray-500" : ""
-                    }`}
-                  >
-                    {v.title}
-                  </p>
-                  <div className="flex gap-2">
-                    {!v.isDone && (
-                      <EditButton onClick={() => handleEdit(v.id)} />
-                    )}
-
-                    <DeleteButton onClick={() => handleDelete(v.id)} />
-                  </div>
-                </div>
-              </div>
+                handleDropDrag={handleDropDrag}
+              />
             ))}
         </div>
       </div>
