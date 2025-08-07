@@ -16,4 +16,5 @@
 9. Use Icons
 10. Add Drag Icon on Todo List
 11. Change Edit Behavior to make editable in list
-12. styling of task container width
+12. Styling of task container width
+13. Code organizing
