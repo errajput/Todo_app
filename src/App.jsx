@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import CustomCheckbox from "./components/Customcheckbox";
 import DeleteButton from "./components/DeleteButton";
 import EditButton from "./components/EditButton";
+import InputContainer from "./components/InputContainer";
 
 function App() {
   const [todo, setTodo] = useState([]);
@@ -72,26 +73,11 @@ function App() {
       <h1 className=" text-3xl text-black font-bold mb-6">Todo App</h1>
 
       <div className="min-h-full bg-gray-200  rounded-md  flex flex-col items-center gap-2">
-        <div className="flex m-4 gap-2 justify-center mb-4">
-          <input
-            type="text"
-            className="border border-black rounded-md outline-none focus:ring-1 bg-white"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleAdd();
-              }
-            }}
-          />
-          <button
-            className="bg-gray-100  px-2 border rounded-md hover:bg-gray-50 cursor-pointer transition"
-            onClick={handleAdd}
-          >
-            Add
-          </button>
-        </div>
-
+        <InputContainer
+          inputValue={inputValue}
+          handleAdd={handleAdd}
+          setInputValue={setInputValue}
+        />
         <div className="w-full max-w-md">
           {SortedTodo.length === 0 ? (
             <div className="text-center mb-4 text-gray-500 py-10 bg-white shadow-md rounded-md">
