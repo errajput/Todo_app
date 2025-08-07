@@ -1,3 +1,4 @@
+import { PlusIcon } from "@heroicons/react/24/outline";
 const InputContainer = ({ inputValue, setInputValue, handleAdd }) => {
   return (
     <div className="flex m-4 gap-2 justify-center mb-4">
@@ -16,7 +17,7 @@ const InputContainer = ({ inputValue, setInputValue, handleAdd }) => {
         className="bg-gray-100  px-2 border rounded-md hover:bg-gray-50 cursor-pointer transition"
         onClick={handleAdd}
       >
-        Add
+        <PlusIcon className="h-5 w-5" />
       </button>
     </div>
   );
