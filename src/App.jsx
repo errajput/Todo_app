@@ -3,12 +3,15 @@ import CustomCheckbox from "./components/Customcheckbox";
 import DeleteButton from "./components/DeleteButton";
 import EditButton from "./components/EditButton";
 import InputContainer from "./components/InputContainer";
+import { Squares2X2Icon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 function App() {
   const [todo, setTodo] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [draggingId, setDraggingId] = useState(null);
+  const [showCompletedTodo, setShowCompletedTodo] = useState(false);
 
   useEffect(() => {
     // console.log(localStorage.getItem("todo"));
@@ -72,20 +75,20 @@ function App() {
     <div className=" min-h-screen bg-white flex flex-col items-center p-4">
       <h1 className=" text-3xl text-black font-bold mb-6">Todo App</h1>
 
-      <div className="min-h-full bg-gray-200  rounded-md  flex flex-col items-center gap-2">
+      <div className="min-h-full  bg-gray-200  rounded-md  flex flex-col items-center gap-2">
         <InputContainer
           inputValue={inputValue}
           handleAdd={handleAdd}
           setInputValue={setInputValue}
         />
-        <div className="w-full max-w-md">
+        <div className="w-[400px] mx-auto">
           {SortedTodo.length === 0 ? (
             <div className="text-center mb-4 text-gray-500 py-10 bg-white shadow-md rounded-md">
               <p className="text-lg font-medium">No tasks yet</p>
               <p className="text-sm mt-1">Start adding your todos above.</p>
             </div>
           ) : (
-            SortedTodo.map((v) => (
+            SortedTodo.filter((v) => !v.isDone).map((v) => (
               <div
                 key={v.id}
                 className=" p-2 m-2 rounded-md"
@@ -96,7 +99,7 @@ function App() {
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   e.preventDefault();
-                  console.log(draggingId, v);
+                  // console.log(draggingId, v);
 
                   const newTodos = [...todo];
 
@@ -118,6 +121,7 @@ function App() {
                 }}
               >
                 <div className="flex items-center gap-4 ">
+                  <Squares2X2Icon className="h-3 w-3 text-gray-400 cursor-move" />
                   <CustomCheckbox
                     checked={v.isDone}
                     onChange={() => markDone(v.id)}
@@ -140,6 +144,75 @@ function App() {
               </div>
             ))
           )}
+        </div>
+
+        <div className="w-[400px] mx-auto">
+          <button
+            onClick={() => setShowCompletedTodo(!showCompletedTodo)}
+            className=" mb-3 m-4 text-black px-2 transition cursor-pointer"
+          >
+            <ChevronDownIcon
+              className={`h-3 w-3 transform transition-transform duration-1000 ${
+                showCompletedTodo ? "rotate-180" : "rotate-0"
+              }`}
+            />
+          </button>
+          {showCompletedTodo &&
+            SortedTodo.filter((v) => v.isDone).map((v) => (
+              <div
+                key={v.id}
+                className=" p-2 m-2 rounded-md"
+                draggable
+                onDragStart={() => {
+                  setDraggingId(v.id);
+                }}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  // console.log(draggingId, v);
+
+                  const newTodos = [...todo];
+
+                  const draggingIndex = newTodos.findIndex(
+                    (todo) => todo.id === draggingId
+                  );
+
+                  const dropToIndex = newTodos.findIndex(
+                    (todo) => todo.id === v.id
+                  );
+
+                  const draggingTodo = newTodos[draggingIndex];
+                  const dropToTodo = newTodos[dropToIndex];
+
+                  newTodos[draggingIndex] = dropToTodo;
+                  newTodos[dropToIndex] = draggingTodo;
+
+                  saveTodo(newTodos);
+                }}
+              >
+                <div className="flex items-center gap-4 ">
+                  <Squares2X2Icon className="h-3 w-3 text-gray-400 cursor-move" />
+                  <CustomCheckbox
+                    checked={v.isDone}
+                    onChange={() => markDone(v.id)}
+                  />
+                  <p
+                    className={`flex-1 text-left ${
+                      v.isDone ? "line-through text-gray-500" : ""
+                    }`}
+                  >
+                    {v.title}
+                  </p>
+                  <div className="flex gap-2">
+                    {!v.isDone && (
+                      <EditButton onClick={() => handleEdit(v.id)} />
+                    )}
+
+                    <DeleteButton onClick={() => handleDelete(v.id)} />
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     </div>
