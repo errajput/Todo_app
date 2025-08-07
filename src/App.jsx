@@ -4,7 +4,8 @@ import DeleteButton from "./components/DeleteButton";
 import EditButton from "./components/EditButton";
 import InputContainer from "./components/InputContainer";
 import { Squares2X2Icon } from "@heroicons/react/24/outline";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+
+import ShowCompletedTodo from "./components/ShowCompletedtodo";
 
 function App() {
   const [todo, setTodo] = useState([]);
@@ -147,16 +148,10 @@ function App() {
         </div>
 
         <div className="w-[400px] mx-auto">
-          <button
-            onClick={() => setShowCompletedTodo(!showCompletedTodo)}
-            className=" mb-3 m-4 text-black px-2 transition cursor-pointer"
-          >
-            <ChevronDownIcon
-              className={`h-3 w-3 transform transition-transform duration-1000 ${
-                showCompletedTodo ? "rotate-180" : "rotate-0"
-              }`}
-            />
-          </button>
+          <ShowCompletedTodo
+            setShowCompletedTodo={setShowCompletedTodo}
+            showCompletedTodo={showCompletedTodo}
+          />
           {showCompletedTodo &&
             SortedTodo.filter((v) => v.isDone).map((v) => (
               <div
